@@ -30,19 +30,19 @@ var (
 		Namespace: "kube_event",
 		Subsystem: "",
 		Name:      "count",
-		Help:      "Number of kubernetes event happened",
-	}, []string{"name", "involved_object_namespace", "namespace", "involved_object_name", "involved_object_kind", "reason", "type", "source"})
+		Help:      "Number of kubernetes events that happened",
+	}, []string{"involved_object_namespace", "namespace", "involved_object_name", "involved_object_kind", "reason", "type", "source"})
 	eventTotal = promauto.NewCounterVec(prometheus.CounterOpts{
 		Namespace: "kube_event",
 		Subsystem: "",
 		Name:      "unique_events_total",
-		Help:      "Total number of kubernetes unique event happened",
-	}, []string{"name", "involved_object_namespace", "namespace", "involved_object_name", "involved_object_kind", "reason", "type", "source"})
+		Help:      "Total number of kubernetes unique events that happened",
+	}, []string{"involved_object_namespace", "namespace", "involved_object_name", "involved_object_kind", "reason", "type", "source"})
 )
 
 func increaseUniqueEventTotal(event *v1.Event) {
 	eventTotal.With(prometheus.Labels{
-		"name":                      event.ObjectMeta.Name,
+		// "name":                      event.ObjectMeta.Name,
 		"namespace":                 event.Namespace,
 		"involved_object_namespace": event.InvolvedObject.Namespace,
 		"involved_object_name":      event.InvolvedObject.Name,
@@ -55,7 +55,7 @@ func increaseUniqueEventTotal(event *v1.Event) {
 
 func updateEventCount(event *v1.Event) {
 	eventCount.With(prometheus.Labels{
-		"name":                      event.ObjectMeta.Name,
+		// "name":                      event.ObjectMeta.Name,
 		"namespace":                 event.Namespace,
 		"involved_object_namespace": event.InvolvedObject.Namespace,
 		"involved_object_name":      event.InvolvedObject.Name,
@@ -68,7 +68,7 @@ func updateEventCount(event *v1.Event) {
 
 func delEventCountMetric(event *v1.Event) {
 	ret := eventCount.Delete(prometheus.Labels{
-		"name":                      event.ObjectMeta.Name,
+		// "name":                      event.ObjectMeta.Name,
 		"namespace":                 event.Namespace,
 		"involved_object_namespace": event.InvolvedObject.Namespace,
 		"involved_object_name":      event.InvolvedObject.Name,
@@ -84,7 +84,7 @@ func delEventCountMetric(event *v1.Event) {
 
 func delEventTotalMetric(event *v1.Event) {
 	ret := eventTotal.Delete(prometheus.Labels{
-		"name":                      event.ObjectMeta.Name,
+		// "name":                      event.ObjectMeta.Name,
 		"namespace":                 event.Namespace,
 		"involved_object_namespace": event.InvolvedObject.Namespace,
 		"involved_object_name":      event.InvolvedObject.Name,

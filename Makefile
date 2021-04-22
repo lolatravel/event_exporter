@@ -17,7 +17,7 @@
 # The makefile is also responsible to populate project version information.
 #
 
-ROOT := github.com/caicloud/event_exporter
+ROOT := github.com/lolatravel/event_exporter
 VERSION ?= $(shell git describe --tags --always --dirty)
 COMMIT = $(shell git rev-parse HEAD)
 BRANCH = $(shell git branch | grep \* | cut -d ' ' -f2)
@@ -32,7 +32,7 @@ export SHELLOPTS := errexit
 export GOFLAGS := -mod=vendor
 
 # this is not a public registry; change it to your own
-REGISTRY ?= caicloud/
+REGISTRY ?= rhemz/
 BASE_REGISTRY ?=
 
 ARCH ?=
@@ -86,11 +86,11 @@ build-linux:
 
 container: build-linux
 	@echo ">> building image"
-	@docker build -t $(REGISTRY)event-exporter:$(VERSION) --label $(DOCKER_LABELS)  -f $(BUILD_DIR)/Dockerfile .
+	@docker build -t $(REGISTRY)kube-event-exporter:$(VERSION) --label $(DOCKER_LABELS)  -f $(BUILD_DIR)/Dockerfile .
 
 push: container
 	@echo ">> pushing image"
-	@docker push $(REGISTRY)event-exporter:$(VERSION)
+	@docker push $(REGISTRY)kube-event-exporter:$(VERSION)
 
 lint: $(GOLANGCI_LINT)
 	@echo ">> running golangci-lint"
